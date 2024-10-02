@@ -21,4 +21,12 @@ body {
   .large-container {
     @apply mx-auto 4xl:max-w-[1760px];
   }
+
+  /* Modal create */
+  .modalOpen {
+    @apply visible scale-100 opacity-100;
+  }
+  .modalClose {
+    @apply invisible scale-0 opacity-0;
+  }
 }

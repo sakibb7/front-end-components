@@ -4,10 +4,164 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Drop Down</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="container">
-      <div class="w-full h-3 bg-p1"></div>
+    <div class="container bg-gray-50">
+      <div class="flex justify-center items-start pt-8 h-[250px]">
+        <div class="relative" id="notificationSortBy">
+          <p class="select-item cursor-pointer">
+            <span class="sortByText">Click Me</span>
+            <i class="ph ph-caret-down"></i>
+          </p>
+
+          <div
+            class="absolute top-8 right-0 bg-red-500 rounded-xl p-4 min-w-24 z-50 text-base duration-700 origin-top-right text-white modalClose text-nowrap"
+            id="notificationSortByModal"
+          >
+            <ul class="flex justify-start items-start flex-col gap-3">
+              <li class="dropdownItem cursor-pointer">Item One</li>
+              <li class="dropdownItem cursor-pointer">Item Two</li>
+              <li class="dropdownItem cursor-pointer">Item Three</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="px-8">
+        <pre>
+          <code class="language-css">
+            /* Modal create */
+            .modalOpen {
+              @apply visible scale-100 opacity-100;
+            }
+            .modalClose {
+              @apply invisible scale-0 opacity-0;
+            }
+          </code>
+        </pre>
+        <pre><code class="language-javascript">
+
+          // modal toggle function
+        function modalToggle(modalName, modalBox, open, close) {
+          modalName.addEventListener("click", () => {
+            if (modalBox.classList.contains(open)) {
+              modalBox.classList.remove(open);
+              modalBox.classList.add(close);
+              document.removeEventListener("click", closeDropdownOutside);
+            } else {
+              modalBox.classList.add(open);
+              modalBox.classList.remove(close);
+              document.addEventListener("click", closeDropdownOutside);
+            }
+  
+            function closeDropdownOutside(event) {
+              const isClickedInsideDropdown = modalBox.contains(event.target);
+              const isClickedOnDropdownBtn = modalName.contains(event.target);
+  
+              if (!isClickedInsideDropdown && !isClickedOnDropdownBtn) {
+                modalBox.classList.add(close);
+                modalBox.classList.remove(open);
+                document.removeEventListener("click", closeDropdownOutside);
+              }
+            }
+          });
+        }
+  
+  
+        //select item from modal
+        function selectItemFromModal(items, modalBox, slectText) {
+          items.forEach((e) =>
+            e.addEventListener("click", () => {
+              modalBox.classList.remove("modalClose");
+              modalBox.classList.add("modalOpen");
+              slectText.innerHTML = e.textContent;
+            })
+          );
+        }
+  
+  
+        // notification sortby modal
+        const notificationSortBy = document.querySelector("#notificationSortBy");
+        const notificationSortByModal = document.querySelector(
+          "#notificationSortByModal"
+        );
+  
+        const sortByText = document.querySelector(".sortByText");
+        const dropdownItem = document.querySelectorAll(".dropdownItem");
+  
+        notificationSortBy &&
+          modalToggle(
+            notificationSortBy,
+            notificationSortByModal,
+            "modalOpen",
+            "modalClose"
+          );
+  
+        sortByText &&
+          selectItemFromModal(dropdownItem, notificationSortByModal, sortByText);
+          </code></pre>
+      </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script>
+      // modal toggle function
+      function modalToggle(modalName, modalBox, open, close) {
+        modalName.addEventListener("click", () => {
+          if (modalBox.classList.contains(open)) {
+            modalBox.classList.remove(open);
+            modalBox.classList.add(close);
+            document.removeEventListener("click", closeDropdownOutside);
+          } else {
+            modalBox.classList.add(open);
+            modalBox.classList.remove(close);
+            document.addEventListener("click", closeDropdownOutside);
+          }
+
+          function closeDropdownOutside(event) {
+            const isClickedInsideDropdown = modalBox.contains(event.target);
+            const isClickedOnDropdownBtn = modalName.contains(event.target);
+
+            if (!isClickedInsideDropdown && !isClickedOnDropdownBtn) {
+              modalBox.classList.add(close);
+              modalBox.classList.remove(open);
+              document.removeEventListener("click", closeDropdownOutside);
+            }
+          }
+        });
+      }
+      //select item from modal
+      function selectItemFromModal(items, modalBox, slectText) {
+        items.forEach((e) =>
+          e.addEventListener("click", () => {
+            modalBox.classList.remove("modalClose");
+            modalBox.classList.add("modalOpen");
+            slectText.innerHTML = e.textContent;
+          })
+        );
+      }
+      // notification sortby modal
+      const notificationSortBy = document.querySelector("#notificationSortBy");
+      const notificationSortByModal = document.querySelector(
+        "#notificationSortByModal"
+      );
+
+      const sortByText = document.querySelector(".sortByText");
+      const dropdownItem = document.querySelectorAll(".dropdownItem");
+
+      notificationSortBy &&
+        modalToggle(
+          notificationSortBy,
+          notificationSortByModal,
+          "modalOpen",
+          "modalClose"
+        );
+
+      sortByText &&
+        selectItemFromModal(dropdownItem, notificationSortByModal, sortByText);
+    </script>
   </body>
 </html>
